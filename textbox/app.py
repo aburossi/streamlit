@@ -45,12 +45,17 @@ if generate_button or user_input:
         st.write("Generated Links:")
         generated_links = []
         
-        # Generate and display each link
+        # Generate and display each link with the input text as the hyperlink text
         for line in lines:
             encoded_line = urllib.parse.quote(line)
             link = f"https://allgemeinbildung.github.io/textbox/answers?assignmentId={encoded_line}"
-            st.markdown(f"- [Click here to open]({link}){{target=_blank}}", unsafe_allow_html=True)
+            st.markdown(f"- [{line}]({link})", unsafe_allow_html=True)
             generated_links.append(link)
         
         # Display all links as plain text for bulk copying
         st.text_area("Bulk Copy All Links", "\n".join(generated_links), height=150)
+        
+        # Add a "Copy All Links" button
+        if st.button("Copy All Links"):
+            st.experimental_set_query_params(links="\n".join(generated_links))
+            st.success("All links copied to clipboard!")
