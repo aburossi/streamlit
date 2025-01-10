@@ -1,7 +1,10 @@
 import streamlit as st
 import urllib.parse
 
-# Force light mode by setting a custom style
+# Page configuration (must be the first Streamlit command)
+st.set_page_config(page_title="Multi-Link Generator", layout="centered")
+
+# Custom style for light mode
 st.markdown(
     """
     <style>
@@ -18,9 +21,6 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
-
-# Page configuration
-st.set_page_config(page_title="Multi-Link Generator", layout="centered")
 
 # Title of the app
 st.title("Multi-Link Generator")
