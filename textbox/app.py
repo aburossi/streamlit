@@ -1,35 +1,56 @@
 import streamlit as st
 import urllib.parse
 
+# Force light mode by setting a custom style
+st.markdown(
+    """
+    <style>
+    body {
+        background-color: white;
+        color: black;
+    }
+    textarea {
+        background-color: #f0f0f0;
+        color: black;
+        font-size: 16px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 # Page configuration
-st.set_page_config(page_title="Link Generator", layout="centered")
+st.set_page_config(page_title="Multi-Link Generator", layout="centered")
 
 # Title of the app
-st.title("Link Generator")
+st.title("Multi-Link Generator")
 
-# Text input with larger size and placeholder
+# Multi-line text input
 user_input = st.text_area(
-    "Enter your text here:",
+    "Enter one text per line (each line will generate a separate link):",
     "",
-    height=100,
-    placeholder="Type your text here...",
+    height=200,
+    placeholder="Type your text here, each line will generate a link...",
     key="text_input"
 )
 
-# Button to generate the link
-generate_button = st.button("Generate Link")
+# Button to generate the links
+generate_button = st.button("Generate Links")
 
-# Check if the button is pressed or Enter is hit
 if generate_button or user_input:
-    # Encode the user input for URL
-    encoded_input = urllib.parse.quote(user_input)
+    # Split input by lines and remove empty lines
+    lines = [line.strip() for line in user_input.splitlines() if line.strip()]
     
-    # Generate the link
-    generated_link = f"https://allgemeinbildung.github.io/textbox/answers?assignmentId={encoded_input}"
-    
-    # Display the generated link with a clickable option
-    st.write("Generated Link:")
-    st.markdown(f"[Click here to open in a new window]({generated_link}){{target=_blank}}", unsafe_allow_html=True)
-    
-    # Display the link as text for copying
-    st.code(generated_link, language="markdown")
+    if lines:
+        st.write("Generated Links:")
+        generated_links = []
+        
+        # Generate and display each link
+        for line in lines:
+            encoded_line = urllib.parse.quote(line)
+            link = f"https://allgemeinbildung.github.io/textbox/answers?assignmentId={encoded_line}"
+            st.markdown(f"- [Click here to open]({link}){{target=_blank}}", unsafe_allow_html=True)
+            generated_links.append(link)
+        
+        # Display all links as plain text for bulk copying
+        st.text_area("Bulk Copy All Links", "\n".join(generated_links), height=150)
